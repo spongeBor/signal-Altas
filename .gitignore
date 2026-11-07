@@ -1,0 +1,22 @@
+# Dependencies and build output
+node_modules/
+web/dist/
+api/internal/webui/dist/*
+!api/internal/webui/dist/.gitkeep
+
+# Local runtime state and secrets
+runtime/
+.local/
+.env
+.env.*
+!.env.example
+*.log
+
+# Editor and OS noise
+.DS_Store
+.cursor/
+.vscode/
+
+
+# Tool-private session memory
+.workbuddy-ai/

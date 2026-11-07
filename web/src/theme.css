@@ -1,0 +1,537 @@
+/* Shared semantic colors: the original light console and the night control room. */
+:root {
+  color-scheme: light;
+  --surface: #fff;
+  --surface-glass: #fffffffa;
+  --canvas: #f4f6fa;
+  --text-strong: #0f172a;
+  --text-body: #334155;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --border: #e2e8f0;
+  --border-subtle: #edf1f6;
+  --border-strong: #cbd5e1;
+  --surface-raised: #f1f5f9;
+  --surface-subtle: #f8fafc;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-soft: #eff6ff;
+  --accent-border: #dbeafe;
+  --success: #0d9488;
+  --success-text: #0f766e;
+  --success-soft: #f0fdfa;
+  --success-border: #ccfbf1;
+  --warning: #d97706;
+  --warning-text: #92400e;
+  --warning-soft: #fffbeb;
+  --warning-border: #fde68a;
+  --grid-dot: #cbd5e190;
+}
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --surface: #0e1a2a;
+  --surface-glass: #0e1a2af5;
+  --canvas: #07101d;
+  --text-strong: #e9f2ff;
+  --text-body: #c7d8ea;
+  --text-secondary: #a9bdd2;
+  --text-muted: #91a7bf;
+  --text-faint: #8ba1ba;
+  --border: #22354c;
+  --border-subtle: #1b2c40;
+  --border-strong: #35516e;
+  --surface-raised: #142439;
+  --surface-subtle: #0b1625;
+  --accent: #5bcffa;
+  --accent-strong: #9ee5ff;
+  --accent-soft: #102d43;
+  --accent-border: #255c7c;
+  --success: #4cddbf;
+  --success-text: #7ae9ce;
+  --success-soft: #102e30;
+  --success-border: #22514f;
+  --warning: #ffbf75;
+  --warning-text: #f4c48b;
+  --warning-soft: #30271f;
+  --warning-border: #66503a;
+  --grid-dot: #28415d80;
+}
+/* A functional switch remains available in both themes. */
+.theme-toggle {
+  gap: 7px;
+}
+.login-theme {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+}
+.page-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font:
+    10px ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+.page-kicker i {
+  width: 18px;
+  height: 1px;
+  background: var(--accent);
+}
+/* White foregrounds are deliberately independent of the surface token. */
+.button.primary,
+.ap-anchor {
+  color: #fff;
+}
+html[data-theme='dark'] body {
+  background:
+    radial-gradient(ellipse at 95% 0, #12365044, transparent 46%),
+    linear-gradient(#16304922 1px, transparent 1px),
+    linear-gradient(90deg, #16304922 1px, transparent 1px), var(--canvas);
+  background-size:
+    auto,
+    64px 64px,
+    64px 64px,
+    auto;
+  background-attachment: fixed;
+}
+html[data-theme='dark'] .sidebar {
+  background: linear-gradient(180deg, #0d1c2e, #091321 75%);
+  border-right-color: #233a52;
+}
+html[data-theme='dark'] .brand {
+  color: #e5f6ff;
+  letter-spacing: -0.5px;
+}
+html[data-theme='dark'] .brand > svg {
+  color: var(--accent);
+  filter: drop-shadow(0 0 8px #3bc2ff45);
+}
+html[data-theme='dark'] .workspace-label {
+  letter-spacing: 2px;
+}
+html[data-theme='dark'] .sidebar nav a {
+  border: 1px solid transparent;
+}
+html[data-theme='dark'] .sidebar nav a.active {
+  background: linear-gradient(90deg, #12415a88, #102c4140);
+  border-color: #28506a;
+  box-shadow: inset 2px 0 var(--accent);
+  color: #b5ecff;
+}
+html[data-theme='dark'] .sidebar nav a:hover {
+  background-color: #14283d;
+}
+html[data-theme='dark'] .topbar {
+  border-bottom-color: #25405a80;
+}
+html[data-theme='dark'] .live-status .dot.green {
+  box-shadow: 0 0 10px #4cddbf65;
+}
+html[data-theme='dark'] .page-heading h1 {
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+html[data-theme='dark'] .page-heading {
+  padding-top: 26px;
+}
+html[data-theme='dark'] .last-updated time {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+html[data-theme='dark'] .panel,
+html[data-theme='dark'] .metric,
+html[data-theme='dark'] .connection-card,
+html[data-theme='dark'] .login-card {
+  border-color: var(--border);
+  background: linear-gradient(145deg, #13243a70, transparent 55%), var(--surface);
+  box-shadow:
+    0 8px 28px #00000018,
+    inset 0 1px #8ecbff08;
+  border-radius: 12px;
+}
+html[data-theme='dark'] .metric {
+  position: relative;
+  overflow: hidden;
+}
+html[data-theme='dark'] .metric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 34px;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 14px #5bcffa35;
+}
+html[data-theme='dark'] .metric:nth-child(2)::before {
+  background: var(--success);
+}
+html[data-theme='dark'] .metric:nth-child(3)::before {
+  background: #a99aff;
+}
+html[data-theme='dark'] .metric:nth-child(4)::before {
+  background: #7caaff;
+}
+html[data-theme='dark'] .metric-value,
+html[data-theme='dark'] .optical-metrics article > b,
+html[data-theme='dark'] .summary-metrics article > b:not(.text),
+html[data-theme='dark'] .history-stats b {
+  font-family: ui-monospace, SFMono-Regular, 'PingFang SC', monospace;
+  font-weight: 500;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+html[data-theme='dark'] .metric-value small,
+html[data-theme='dark'] .optical-metrics small,
+html[data-theme='dark'] .summary-metrics small,
+html[data-theme='dark'] .history-stats small {
+  letter-spacing: 0;
+  font-family: inherit;
+}
+html[data-theme='dark'] .panel-heading h2 {
+  letter-spacing: 0.3px;
+}
+html[data-theme='dark'] .optical-panel {
+  border-top-color: #327b9a;
+}
+html[data-theme='dark'] .optical-metrics article > b {
+  font-size: 29px;
+}
+html[data-theme='dark'] .optical-metrics article:first-child > b,
+html[data-theme='dark'] .optical-metrics article:nth-child(2) > b {
+  color: #a4e4ff;
+}
+html[data-theme='dark'] .topology-map {
+  background-color: #091524;
+  background-size: 20px 20px;
+  border-block: 1px solid var(--border-subtle);
+}
+html[data-theme='dark'] .topology-map svg > g > path {
+  stroke: #4386a7;
+  stroke-width: 1.6px;
+}
+html[data-theme='dark'] .topology-node rect {
+  fill: #12263a;
+  stroke: #355a76;
+}
+html[data-theme='dark'] .topology-node:hover rect,
+html[data-theme='dark'] .topology-node:focus-visible rect {
+  fill: #193c52;
+  stroke: #72ddff;
+  filter: drop-shadow(0 0 5px #47bcff35);
+}
+html[data-theme='dark'] .edge-label {
+  fill: #a6c6df;
+  paint-order: stroke;
+  stroke: #091524;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+html[data-theme='dark'] .topology-node circle {
+  filter: drop-shadow(0 0 3px #65dbbd55);
+}
+html[data-theme='dark'] .archive-topology rect {
+  fill: var(--surface-raised);
+  stroke: var(--border-strong);
+}
+html[data-theme='dark'] .archive-topology text {
+  fill: var(--text-body);
+}
+html[data-theme='dark'] .archive-topology path {
+  stroke: #4386a7;
+}
+html[data-theme='dark'] .button.primary {
+  color: #04131e;
+  background: #62cef5;
+  border-color: #85defb;
+  box-shadow: 0 2px 10px #40bbf01c;
+}
+html[data-theme='dark'] .button.primary:hover {
+  background: #9de7ff;
+}
+html[data-theme='dark'] .button.subtle:hover,
+html[data-theme='dark'] .button.secondary:hover {
+  color: #d9f3ff;
+}
+html[data-theme='dark'] .summary-filter button.active {
+  border-color: var(--accent-border);
+}
+html[data-theme='dark'] .summary-extra,
+html[data-theme='dark'] .summary-switch-record {
+  background-color: var(--surface-subtle);
+}
+html[data-theme='dark'] .recorded-port-grid > div {
+  background: #122238;
+}
+html[data-theme='dark'] .drawer {
+  border-left: 1px solid var(--border-strong);
+  box-shadow: -20px 0 80px #0007;
+}
+html[data-theme='dark'] .drawer-backdrop {
+  background: #020711b8;
+  backdrop-filter: blur(4px);
+}
+html[data-theme='dark'] .toast {
+  background: #14354b;
+  border: 1px solid #35627e;
+  color: #e7f5ff;
+}
+html[data-theme='dark'] .login-page {
+  background:
+    radial-gradient(ellipse at 20% 25%, #15476b70, transparent 52%),
+    radial-gradient(ellipse at 80% 85%, #133c4860, transparent 50%),
+    linear-gradient(#4b8eb510 1px, transparent 1px),
+    linear-gradient(90deg, #4b8eb510 1px, transparent 1px), #07101d;
+  background-size:
+    auto,
+    auto,
+    48px 48px,
+    48px 48px,
+    auto;
+}
+html[data-theme='dark'] .login-card {
+  border-top: 2px solid #51c6f2;
+  box-shadow: 0 24px 100px #0006;
+}
+html[data-theme='dark'] .login-error {
+  background: #36232c;
+  color: #ffb3b8;
+  border-color: #814653;
+}
+/* The floor plan is source material: preserve its original colors and survey meaning. */
+html[data-theme='dark'] .floorplan {
+  background-color: #f6f7f9;
+}
+html[data-theme='dark'] .blank-map-message {
+  color: #475569;
+}
+@media (max-width: 760px) {
+  .theme-toggle {
+    padding: 8px;
+    min-width: 34px;
+  }
+  .theme-toggle > span {
+    display: none;
+  }
+  .page-kicker {
+    font-size: 9px;
+    letter-spacing: 0.7px;
+    gap: 7px;
+  }
+  html[data-theme='dark'] .page-heading h1 {
+    font-size: 24px;
+  }
+  html[data-theme='dark'] .optical-metrics article > b {
+    font-size: 24px;
+  }
+  html[data-theme='dark'] .sidebar {
+    background: #0a1728f5;
+  }
+}
+
+/* 皮肤选择器 */
+.skin-picker {
+  position: relative;
+}
+.skin-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+.skin-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 31;
+  min-width: 168px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px #00000030;
+}
+.skin-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-body);
+  font-size: 13px;
+}
+.skin-menu button:hover {
+  background: var(--surface-raised);
+}
+.skin-menu button.active {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+.skin-menu i {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  border: 2px solid var(--border-strong);
+}
+
+/* 暖纸：浅色的暖色变体 */
+html[data-skin='paper'] {
+  --surface: #fbf7ef;
+  --surface-glass: #fbf7eff5;
+  --canvas: #f3ece0;
+  --text-strong: #2f2a24;
+  --text-body: #4a4238;
+  --text-secondary: #5b5145;
+  --text-muted: #7a6e5f;
+  --text-faint: #9a8d7b;
+  --border: #e6ddcc;
+  --border-subtle: #efe8d9;
+  --border-strong: #d5c8b2;
+  --surface-raised: #f1e9db;
+  --surface-subtle: #f8f2e7;
+  --accent: #b45309;
+  --accent-strong: #92400e;
+  --accent-soft: #fdf1e0;
+  --accent-border: #f3d9b5;
+  --success: #0f766e;
+  --success-text: #115e59;
+  --success-soft: #ecfdf5;
+  --success-border: #c7f0e5;
+  --warning: #b45309;
+  --warning-text: #92400e;
+  --warning-soft: #fdf3e3;
+  --warning-border: #f0dcc0;
+  --grid-dot: #d5c8b290;
+}
+html[data-skin='paper'] body {
+  background: radial-gradient(ellipse at 92% 0, #b4530912, transparent 52%), var(--canvas);
+}
+html[data-skin='paper'] .optical-panel {
+  border-top-color: #b45309;
+}
+
+/* 石墨：深色的中性色变体 */
+html[data-skin='graphite'] {
+  --surface: #141417;
+  --surface-glass: #141417f5;
+  --canvas: #0b0b0d;
+  --text-strong: #f0efec;
+  --text-body: #d6d4cf;
+  --text-secondary: #b9b6b0;
+  --text-muted: #948f87;
+  --text-faint: #7d7871;
+  --border: #2a2a30;
+  --border-subtle: #222227;
+  --border-strong: #3b3b43;
+  --surface-raised: #1c1c21;
+  --surface-subtle: #101013;
+  --accent: #f0b429;
+  --accent-strong: #ffd166;
+  --accent-soft: #2a2213;
+  --accent-border: #5a4620;
+  --success: #5fd0a8;
+  --success-text: #8ce3c2;
+  --success-soft: #14251f;
+  --success-border: #2a4a3e;
+  --warning: #f0b429;
+  --warning-text: #f4c48b;
+  --warning-soft: #2a2416;
+  --warning-border: #5a4a2a;
+  --grid-dot: #2a2a3080;
+}
+html[data-skin='graphite'] body {
+  background:
+    radial-gradient(ellipse at 95% 0, #3a2f1533, transparent 46%),
+    linear-gradient(#1c1c2111 1px, transparent 1px),
+    linear-gradient(90deg, #1c1c2111 1px, transparent 1px), var(--canvas);
+  background-size:
+    auto,
+    64px 64px,
+    64px 64px,
+    auto;
+  background-attachment: fixed;
+}
+html[data-skin='graphite'] .sidebar {
+  background: linear-gradient(180deg, #17171b, #0d0d10 75%);
+  border-right-color: #2a2a30;
+}
+html[data-skin='graphite'] .brand {
+  color: #f5f2ea;
+}
+html[data-skin='graphite'] .brand > svg {
+  filter: drop-shadow(0 0 8px #f0b42945);
+}
+html[data-skin='graphite'] .sidebar nav a.active {
+  background: linear-gradient(90deg, #3a2f1588, #241f1240);
+  border-color: #4a3d20;
+  color: #ffe3a3;
+}
+html[data-skin='graphite'] .sidebar nav a:hover {
+  background-color: #1f1f24;
+}
+html[data-skin='graphite'] .topbar {
+  border-bottom-color: #2a2a3080;
+}
+html[data-skin='graphite'] .panel,
+html[data-skin='graphite'] .metric,
+html[data-skin='graphite'] .connection-card,
+html[data-skin='graphite'] .login-card {
+  background: linear-gradient(145deg, #ffffff06, transparent 55%), var(--surface);
+  box-shadow:
+    0 8px 28px #00000024,
+    inset 0 1px #ffffff08;
+}
+html[data-skin='graphite'] .metric::before {
+  background: var(--accent);
+  box-shadow: 0 0 14px #f0b42935;
+}
+html[data-skin='graphite'] .metric:nth-child(3)::before {
+  background: #b8a1ff;
+}
+html[data-skin='graphite'] .metric:nth-child(4)::before {
+  background: #8fb8ff;
+}
+html[data-skin='graphite'] .topology-map {
+  background-color: #0f0f12;
+}
+html[data-skin='graphite'] .topology-map svg > g > path {
+  stroke: #8a7b52;
+}
+html[data-skin='graphite'] .topology-node rect {
+  fill: #1b1b20;
+  stroke: #3a3a43;
+}
+html[data-skin='graphite'] .topology-node:hover rect,
+html[data-skin='graphite'] .topology-node:focus-visible rect {
+  fill: #26221a;
+  stroke: #f0b429;
+  filter: drop-shadow(0 0 5px #f0b42935);
+}
+html[data-skin='graphite'] .edge-label {
+  fill: #c9c3b4;
+  stroke: #0f0f12;
+}
+html[data-skin='graphite'] .optical-panel {
+  border-top-color: #8a7b52;
+}
+html[data-skin='graphite'] .optical-metrics article:first-child > b,
+html[data-skin='graphite'] .optical-metrics article:nth-child(2) > b {
+  color: #ffd88a;
+}
+html[data-skin='graphite'] .live-status .dot.green {
+  box-shadow: 0 0 10px #5fd0a865;
+}

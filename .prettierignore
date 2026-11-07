@@ -1,0 +1,5 @@
+node_modules
+web/dist
+.local
+package-lock.json
+api/go.sum

@@ -1,0 +1,69 @@
+name: signal-atlas
+services:
+  # Bind mounts are created root-owned on a fresh host; the app runs as 10001,
+  # so hand the data directory over before it starts.
+  data-init:
+    image: busybox:1.37
+    user: "0"
+    command: ["sh", "-c", "mkdir -p /data && chown -R 10001:10001 /data"]
+    volumes:
+      - ./runtime/data:/data
+    restart: "no"
+  demo:
+    image: signal-atlas-api:${SIGNAL_ATLAS_VERSION:-local}
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    profiles: ["demo"]
+    entrypoint: ["/usr/local/bin/signal-atlas-demo"]
+    command: ["-sqlite", "/data/history.db", "-days", "7"]
+    volumes:
+      - ./runtime/data:/data
+    depends_on:
+      data-init: { condition: service_completed_successfully }
+    networks: [atlas]
+    logging:
+      driver: json-file
+      options: { max-size: 10m, max-file: '3' }
+  api:
+    image: signal-atlas-api:${SIGNAL_ATLAS_VERSION:-local}
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-}
+      SIGNAL_ATLAS_PROXY_TOKEN: ${SIGNAL_ATLAS_PROXY_TOKEN:-}
+      SIGNAL_ATLAS_WEB_USER: ${SIGNAL_ATLAS_WEB_USER:-atlas}
+      SIGNAL_ATLAS_WEB_PASSWORD: ${SIGNAL_ATLAS_WEB_PASSWORD:?请设置 SIGNAL_ATLAS_WEB_PASSWORD（16–72 字节）}
+      SIGNAL_ATLAS_HISTORY_DETAIL_DAYS: ${SIGNAL_ATLAS_HISTORY_DETAIL_DAYS:-90}
+      SIGNAL_ATLAS_HISTORY_SUMMARY_DAYS: ${SIGNAL_ATLAS_HISTORY_SUMMARY_DAYS:-365}
+      SIGNAL_ATLAS_KNOWN_HOSTS: /data/known_hosts
+      SIGNAL_ATLAS_CONFIG: ${SIGNAL_ATLAS_CONFIG:-}
+      SIGNAL_ATLAS_SNMP_HOST: ${SIGNAL_ATLAS_SNMP_HOST:-}
+      SIGNAL_ATLAS_SNMP_COMMUNITY: ${SIGNAL_ATLAS_SNMP_COMMUNITY:-}
+      SIGNAL_ATLAS_SNMP_INTERFACE: ${SIGNAL_ATLAS_SNMP_INTERFACE:-pppoe-wan}
+      SIGNAL_ATLAS_SNMP_INTERVAL_MS: ${SIGNAL_ATLAS_SNMP_INTERVAL_MS:-2000}
+      SIGNAL_ATLAS_SNMP_WINDOW_SEC: ${SIGNAL_ATLAS_SNMP_WINDOW_SEC:-60}
+      SIGNAL_ATLAS_SECRET_KEY: ${SIGNAL_ATLAS_SECRET_KEY:-}
+      SIGNAL_ATLAS_ALLOWED_HOSTS: ${SIGNAL_ATLAS_ALLOWED_HOSTS:-*:${SIGNAL_ATLAS_PORT:-8768}}
+      SIGNAL_ATLAS_ALLOWED_ORIGINS: ${SIGNAL_ATLAS_ALLOWED_ORIGINS:-}
+    volumes:
+      - ./runtime/data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    ports:
+      - "${SIGNAL_ATLAS_PORT:-8768}:8790"
+    depends_on:
+      data-init: { condition: service_completed_successfully }
+    networks: [atlas, database]
+    logging:
+      driver: json-file
+      options: { max-size: 10m, max-file: '3' }
+
+networks:
+  atlas: { driver: bridge }
+  database: { external: true, name: signal-atlas-db }

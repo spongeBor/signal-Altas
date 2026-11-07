@@ -1,0 +1,34 @@
+FROM node:24-alpine@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53 AS web
+WORKDIR /web
+COPY package.json package-lock.json ./
+COPY web/package.json ./web/package.json
+RUN npm ci --no-audit --no-fund
+COPY web/ ./web/
+RUN npm run build --workspace @signal-atlas/web
+
+FROM golang:1.26.10-alpine@sha256:27f2d3b83cfc5803c8078f8e730af0f7c431bf067afaec8f60a36fb763187cba AS build
+WORKDIR /src
+ENV GOTOOLCHAIN=local CGO_ENABLED=0
+ARG GOPROXY=https://goproxy.cn,https://proxy.golang.org,direct
+ENV GOPROXY=${GOPROXY}
+COPY api/go.mod api/go.sum ./
+RUN go mod download
+COPY api/ ./
+COPY --from=web /web/web/dist ./internal/webui/dist
+RUN go build -trimpath -ldflags="-s -w" -o /out/signal-atlas ./cmd/server \
+    && go build -trimpath -ldflags="-s -w" -o /out/signal-atlas-demo ./cmd/demo
+
+FROM alpine:3.22@sha256:2e0b81d60597f449baa56dc25d355367869d2dca4cd57e866f1e2b52af3eb55f
+RUN apk add --no-cache ca-certificates tzdata \
+    && addgroup -g 10001 atlas && adduser -D -u 10001 -G atlas atlas \
+    && mkdir -p /data /etc/atlas && chown 10001:10001 /data
+COPY --from=build /out/signal-atlas /usr/local/bin/signal-atlas
+COPY --from=build /out/signal-atlas-demo /usr/local/bin/signal-atlas-demo
+ENV TZ=Asia/Shanghai
+USER 10001:10001
+WORKDIR /data
+EXPOSE 8790
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=3 \
+  CMD ["/usr/local/bin/signal-atlas", "-healthcheck"]
+ENTRYPOINT ["/usr/local/bin/signal-atlas"]
+CMD ["-addr", "0.0.0.0:8790", "-data-dir", "/data"]

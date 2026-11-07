@@ -1,0 +1,40 @@
+# Signal Atlas 部署配置（可选）。
+#
+# 加载顺序：环境变量 > 本文件 > 内置默认值。
+# 默认路径是数据目录下的 config.yaml（容器内为 /data/config.yaml），
+# 也可以用 SIGNAL_ATLAS_CONFIG 指定任意路径。
+#
+# 设备清单（profiles）和密码不在本文件里：前者在「采集与设置」页面维护，
+# 后者加密保存在数据目录的 secrets.enc。
+
+# 监听地址；容器部署通常由命令行 -addr 指定。
+listen: "127.0.0.1:8790"
+
+# 局域网网段，留空表示自动判断（后续版本用于自动发现）。
+lan_cidr: ""
+
+# 采集周期（秒），对应页面上的采样间隔。
+interval_seconds: 30
+
+retention:
+  # 明细保留天数（设备快照、流量明细、事件等）。
+  detail_days: 60
+  # 小时汇总保留天数。
+  summary_days: 365
+
+snmp:
+  # 路由器 SNMP 地址；留空则不启用 2 秒峰值采样（页面只显示 30 秒口径）。
+  host: "192.168.1.1"
+  # WAN 接口名，OpenWrt 上通常是 pppoe-wan。
+  interface: "pppoe-wan"
+  # 采样间隔与滚动窗口。
+  interval_ms: 1000
+  window_seconds: 60
+  # 团体名不写在这里，继续用环境变量 SIGNAL_ATLAS_SNMP_COMMUNITY。
+
+# 时延探测目标；由路由器发出。
+ping_targets:
+  - { name: "网关", host: "192.168.1.1" }
+  - { name: "接入点", host: "192.168.1.2" }
+  - { name: "公网·阿里", host: "223.5.5.5" }
+  - { name: "公网·Cloudflare", host: "1.1.1.1" }
