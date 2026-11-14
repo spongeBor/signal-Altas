@@ -141,6 +141,10 @@ func collectRouter(ctx context.Context, p domain.Profile, password, keys string)
 		counters[strings.TrimSpace(f[0])] = values
 	}
 	qos := map[string]map[string]uint64{"down": parseQoSCounters(parts["QOS_DOWN"]), "up": parseQoSCounters(parts["QOS_UP"])}
+	// A 600 ms window treated any sub-second burst (a provider refresh, the
+	// collector's own command batch) as sustained load. Two seconds averages
+	// those out while still showing real sustained CPU.
+	const cpuWindow = 2 * time.Second
 	cpu0, err := r.run(ctx, "head -n 1 /proc/stat")
 	if err != nil {
 		return nil, err
@@ -148,7 +152,7 @@ func collectRouter(ctx context.Context, p domain.Profile, password, keys string)
 	select {
 	case <-ctx.Done():
 		return nil, ctx.Err()
-	case <-time.After(600 * time.Millisecond):
+	case <-time.After(cpuWindow):
 	}
 	cpu1, err := r.run(ctx, "head -n 1 /proc/stat")
 	if err != nil {
